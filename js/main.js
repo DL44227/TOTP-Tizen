@@ -44,8 +44,6 @@ function calc(key, keytime, keylength, digest) {
           var time2 = hexToBytes (time);
           var key2 = hexToBytes (key);
           hmac = sha256.hmac(key2, time2);
-          // hmac = bytesToHex (hmac2);
-          // console.log ("DL was here!");
           debug && console.log ("Time:" + time + " Secret: " + key + " sha256.hmac: " + hmac);
         }
         else if (digest === "SHA-512")
@@ -53,8 +51,6 @@ function calc(key, keytime, keylength, digest) {
           var time2 = hexToBytes (time);
           var key2 = hexToBytes (key);
           hmac = sha512.hmac(key2, time2);
-          // hmac = bytesToHex (hmac2);
-          // console.log ("DL was here!");
           debug && console.log ("Time:" + time + " Secret: " + key + " sha512.hmac: " + hmac);
         }
         else
