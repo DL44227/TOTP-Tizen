@@ -1,20 +1,30 @@
 # TOTP-Tizen
-TOTP client for Tizen (Gear S/S2)
+TOTP client for Tizen Smartwatches.
+
+This is fork from tesurijp/TOTP-Tizen, with support for SHA-256-HMAC
+and SHA-512-HMAC.
 
 # Setup
- 1. Find 'one time password' in GalaxyApps and Install this.
- 1. You need create key info "auth_keyinfo.txt" like following:  
-  Service1:Account_A:JBSWY3DPEHPK3PXP  
-  Service2:Account@B:JBSWY3DPEHPK3PXP  
-  Service3:AccountC:JBSWY3DPEHPK3PXP  
+ 1. You need create the file "auth_keyinfo.txt" like following:  
+  Service1:Account_A:JBSWY3DPEHPK3PXP
+  Service2:Account_B:JBSWY3DPEHPK3PXP:6
+  Service3:Account_C:JBSWY3DPEHPK3PXP:9
+  Service4:Account_D:JBSWY3DPEHPK3PXP:6:SHA-256
   ....
-  Service1/2/3 is service name (eg. Google/Microsoft)  
-  Account?? is account in service. (eg. your@mail.com)  
-  JBSW... is TOTP secret key.  
-  service name/ account is just label. It is not related to the calculation of TOTP.  
-  (v1.2)
-   You can also write the fourth parameter which is the number of digits of the generated key. 
-   Service1:Account_A:JBSWY3DPEHPK3PXP:6  
+
+  Service1/2/3 is service name (eg. Google/Microsoft).
+
+  Account... is account in service. (eg. your@mail.com).
+
+  JBSW... is TOTP secret key.
+
+  The optional digit in field defines the amount of digits displayed, 
+  default ist 6.
+
+  The optional HMAC field defines the HMAC to be used:
+    SHA-1 (default)
+    SHA-256
+    SHA-512
 
  1. Copy the file to device.
 
@@ -29,3 +39,5 @@ Please copy in one of the following ways.
  1. copy auth_keyinfo.mp3 to GEAR://music/
     1. rename auth_keyinfo.txt to auth_keyinfo.mp3 (Change only the file name, do not change contents)
     1. push it as music data by GearManager 
+ 1. Use sdb: ./tizen-studio/tools/sdb push auth_keyinfo.txt /home/owner/media/Documents/
+
