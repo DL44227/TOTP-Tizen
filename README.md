@@ -7,25 +7,23 @@ and SHA-512-HMAC.
 # Setup
 
 You need to create a file "auth_keyinfo.txt" like following:  
-  Service1:Account_A:JBSWY3DPEHPK3PXP
-  Service2:Account_B:JBSWY3DPEHPK3PXP:6
-  Service3:Account_C:JBSWY3DPEHPK3PXP:9
-  Service4:Account_D:JBSWY3DPEHPK3PXP:6:SHA-256
+
+```
+Service1:Account_A:JBSWY3DPEHPK3PXP
+Service2:Account_B:JBSWY3DPEHPK3PXP:6
+Service3:Account_C:JBSWY3DPEHPK3PXP:9
+Service4:Account_D:JBSWY3DPEHPK3PXP:6:SHA-256
   ....
+```
 
-  Service1/2/3 is service name (eg. Google/Microsoft).
-
-  Account... is account in service. (eg. your@mail.com).
-
-  JBSW... is TOTP secret key.
-
-  The optional digit in field defines the amount of digits displayed, 
-  default ist 6.
-
-  The optional HMAC field defines the HMAC to be used:
-    SHA-1 (default)
-    SHA-256
-    SHA-512
+- Service1/2/3 is service name (eg. Google/Microsoft).
+- Account... is account in service. (eg. your@mail.com).
+- JBSW... is TOTP secret key.
+- The optional digit in field defines the amount of digits displayed, default ist 6.
+- The optional HMAC field defines the HMAC to be used:
+  - SHA-1 (default)
+  - SHA-256
+  - SHA-512
 
 Copy the file to device by using one of the following ways:
 
