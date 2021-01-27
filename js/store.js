@@ -53,10 +53,15 @@ function ReadItems(next){
                                 keyItem.service = splited[0];
                                 keyItem.id = splited[1];
                                 keyItem.key = base32tohex(splited[2].toUpperCase());
-                                if(splited.length === 4){
+                                if(splited.length >= 4){
                                     keyItem.digits = splited[3];
                                 } else {
                                     keyItem.digits = 6;
+                                }
+                                if(splited.length >= 5){
+                                    keyItem.digest = splited[4];
+                                } else {
+                                    keyItem.digest = "SHA-1";
                                 }
                                 keyItems.push(keyItem);
                             }

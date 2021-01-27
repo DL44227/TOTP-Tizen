@@ -120,6 +120,7 @@
 }
 .ui-listview li {
 	position: relative;
+	font-size: 3.0rem;
 }
 .ui-listview li input[type="checkbox"]:not(.ui-switch-input),
 .ui-listview li input[type="radio"] {

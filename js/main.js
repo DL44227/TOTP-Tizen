@@ -4,21 +4,73 @@ var UpdateRemainTimeInner;
 var remainTime;
 var progressBarWidget;
 var snapListComponent;
+var debug=0;
 
 var tokenList = document.getElementById("Tokens");
 
 window.onload = Redraw();
 
-function calc(key, keytime, keylength) {
+// Convert a hex string to a byte array
+function hexToBytes(hex) {
+    for (var bytes = [], c = 0; c < hex.length; c += 2)
+    {
+      bytes.push(parseInt(hex.substr(c, 2), 16));
+    }
+    return bytes;
+}
+
+// Convert a byte array to a hex string
+function bytesToHex(bytes) {
+    for (var hex = [], i = 0; i < bytes.length; i++) {
+        var current = bytes[i] < 0 ? bytes[i] + 256 : bytes[i];
+        hex.push((current >> 4).toString(16));
+        hex.push((current & 0xF).toString(16));
+    }
+    return hex.join("");
+}
+
+function calc(key, keytime, keylength, digest) {
     try{
         var time = ("0000000000000000" + keytime.toString(16)).slice(-16);
-        var hmac = (new jsSHA(time,"HEX")).getHMAC(key, "HEX", "SHA-1", "HEX");
 
+        var hmac = "";
+        if (digest === "SHA-1")
+        {
+          hmac = (new jsSHA(time,"HEX")).getHMAC(key, "HEX", "SHA-1", "HEX");
+          debug && console.log ("Time:" + time + " Secret: " + key + " SHA1.getHMAC: " + hmac);
+        }
+        else if (digest === "SHA-256")
+        {
+          var time2 = hexToBytes (time);
+          var key2 = hexToBytes (key);
+          hmac = sha256.hmac(key2, time2);
+          // hmac = bytesToHex (hmac2);
+          // console.log ("DL was here!");
+          debug && console.log ("Time:" + time + " Secret: " + key + " sha256.hmac: " + hmac);
+        }
+        else if (digest === "SHA-512")
+        {
+          var time2 = hexToBytes (time);
+          var key2 = hexToBytes (key);
+          hmac = sha512.hmac(key2, time2);
+          // hmac = bytesToHex (hmac2);
+          // console.log ("DL was here!");
+          debug && console.log ("Time:" + time + " Secret: " + key + " sha512.hmac: " + hmac);
+        }
+        else
+        {
+          return "" + digest + ":Unknown digest";
+        }
         var offset = parseInt(hmac.substring(hmac.length - 1),16);
         var otp = (parseInt(hmac.substr(offset * 2, 8),16) & parseInt("7fffffff",16)).toString();
 
-        var spaces = new RegExp('.{' + keylength/2 + '}$');
+        var spaces = new RegExp('.{' + Math.round(keylength/2) + '}$');
+        // var spaces = new RegExp('.{' + 3 + '}$');
 
+        debug && console.log ("Offset: " + offset);
+        debug && console.log (" otp: " + otp);
+        debug && console.log (" spaces: " + spaces);
+        // debug && console.log (" ret: " + ret);
         return otp.slice(keylength*-1).replace(spaces, ' $&');
     }catch(err){
         return "000 000";
@@ -54,9 +106,10 @@ function InitList() {
 
 function Update() {
     var calc_time = UpdateRemainTime();
+    debug && console.log ("");
     for(var i=0; i<keyItems.length; i++){
         var item = keyItems[i];
-        var token = calc(item.key,calc_time,item.digits );
+        var token = calc(item.key, calc_time, item.digits, item.digest);
         var item_id = "item_"+i;
 
         var oldelm =  document.getElementById(item_id);
@@ -122,7 +175,7 @@ function Redraw() {
     try{
         document.getElementById("Title").innerHTML=TITLE;
     }catch(e){
-        TITLE = "Token";
+        TITLE = "TOTP by DL";
         REMAIN = " sec. left";
         document.getElementById("Title").innerHTML=TITLE;
     }
