@@ -60,17 +60,15 @@ function calc(key, keytime, keylength, digest) {
         var offset = parseInt(hmac.substring(hmac.length - 1),16);
         var otp = (parseInt(hmac.substr(offset * 2, 8),16) & parseInt("7fffffff",16)).toString();
 
-        var spaces = new RegExp('.{' + Math.round(keylength/2) + '}$');
-        // var spaces = new RegExp('.{' + 3 + '}$');
-
-        debug && console.log ("Offset: " + offset);
-        debug && console.log (" otp: " + otp);
-        debug && console.log (" spaces: " + spaces);
-        // debug && console.log (" ret: " + ret);
-        return otp.slice(keylength*-1).replace(spaces, ' $&');
+        return numberWithSpaces(otp.slice(keylength*-1));
+        
     }catch(err){
         return "000 000";
     }
+}
+
+function numberWithSpaces(x) {
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
 }
 
 
@@ -93,7 +91,7 @@ function InitList() {
     var calc_time = UpdateRemainTime();
     for(var i=0; i<keyItems.length; i++){
         var item = keyItems[i];
-        var token = calc(item.key,calc_time,item.digits );
+        var token = calc(item.key, calc_time, item.digits, item.digest);
         var item_id = "item_"+i;
         var newelm = MakeLiItem(item_id, token,item.service, item.id);
         tokenList.appendChild(newelm);
